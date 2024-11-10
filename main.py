@@ -1,6 +1,7 @@
 from legi_tarsasag import LegiTarsasag
 from jarat import BelfoldiJarat, NemzetkoziJarat
 from jegy_foglalas import JegyFoglalas
+from datetime import datetime
 
 # Fő funkciók
 class FoglalasiRendszer:
@@ -20,18 +21,26 @@ class FoglalasiRendszer:
         self.legi_tarsasag.jarat_hozzaadasa(jarat2)
         self.legi_tarsasag.jarat_hozzaadasa(jarat3)
 
-        self.foglalasok.append(JegyFoglalas(jarat1, "Kiss János"))
-        self.foglalasok.append(JegyFoglalas(jarat2, "Nagy Anna"))
-        self.foglalasok.append(JegyFoglalas(jarat3, "Szabó Péter"))
+        self.foglalasok.append(JegyFoglalas(jarat1, "Kiss János", datetime.now(), "2024-12-01"))
+        self.foglalasok.append(JegyFoglalas(jarat2, "Nagy Anna", datetime.now(), "2024-12-05"))
+        self.foglalasok.append(JegyFoglalas(jarat3, "Szabó Péter", datetime.now(), "2024-12-10"))
         # print("[DEBUG] Alap adatok betöltése kész.")
 
-    def jegy_foglalasa(self, jaratszam, utas_nev):
-        # print(f"[DEBUG] Jegy foglalása - Járatszám: {jaratszam}, Utas név: {utas_nev}")
+    def jegy_foglalasa(self, jaratszam, utas_nev, repules_datuma):
+        # print(f"[DEBUG] Jegy foglalása - Járatszám: {jaratszam}, Utas név: {utas_nev}, Repülés dátuma: {repules_datuma}")
         jarat = self.jarat_keresese(jaratszam)
         if jarat:
-            uj_foglalas = JegyFoglalas(jarat, utas_nev)
-            self.foglalasok.append(uj_foglalas)
-            print(f"Foglalás sikeres. Foglalás ára: {uj_foglalas.foglalas_ara()} Ft")
+            try:
+                foglalas_idopont = datetime.now()
+                repules_date = datetime.strptime(repules_datuma, "%Y-%m-%d")
+                if repules_date <= foglalas_idopont:
+                    print("Hiba: A repülés dátuma jövőbeni dátum kell, hogy legyen.")
+                    return
+                uj_foglalas = JegyFoglalas(jarat, utas_nev, foglalas_idopont, repules_datuma)
+                self.foglalasok.append(uj_foglalas)
+                print(f"Foglalás sikeres. Foglalás ára: {uj_foglalas.foglalas_ara()} Ft, Repülés dátuma: {repules_datuma}")
+            except ValueError:
+                print("Hiba: A dátum formátuma hibás. A helyes formátum: ÉÉÉÉ-HH-NN (pl.: 2024-12-15)")
         else:
             print("Nincs ilyen járat a rendszerben.")
         # print("[DEBUG] Jegy foglalása vége.")
@@ -52,7 +61,7 @@ class FoglalasiRendszer:
         if not self.foglalasok:
             print("Nincs aktív foglalás.")
         for foglalas in self.foglalasok:
-            print(f"Utas: {foglalas.utas_nev}, Járat: {foglalas.jarat.jarat_info()}")
+            print(f"Utas: {foglalas.utas_nev}, Járat: {foglalas.jarat.jarat_info()}, Foglalás időpontja: {foglalas.idopont}, Repülés dátuma: {foglalas.repules_datuma}")
         # print("[DEBUG] Foglalások listázása vége.")
 
     def jarat_keresese(self, jaratszam):
@@ -81,8 +90,9 @@ if __name__ == "__main__":
             rendszer.legi_tarsasag.listaz_jaratok()
             jaratszam = input("Járatszám: ")
             utas_nev = input("Utazó neve: ")
+            repules_datuma = input("Repülés dátuma (formátum: ÉÉÉÉ-HH-NN, pl.: 2024-12-15): ")
             # print("[DEBUG] Jegy foglalása indítása...")
-            rendszer.jegy_foglalasa(jaratszam, utas_nev)
+            rendszer.jegy_foglalasa(jaratszam, utas_nev, repules_datuma)
         elif valasztas == "2":
             utas_nev = input("Utazó neve: ")
             # print("[DEBUG] Foglalás lemondása indítása...")
