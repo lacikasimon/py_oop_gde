@@ -8,22 +8,25 @@ class FoglalasiRendszer:
     def __init__(self):
         # print("[DEBUG] FoglalasiRendszer inicializálása...")
         self.foglalasok = []
-        self.legi_tarsasag = LegiTarsasag("Példa Légitársaság")
+        self.legi_tarsasag = LegiTarsasag("Fly Dubai")
         self.alap_adatok_betoltese()
 
     def alap_adatok_betoltese(self):
         # print("[DEBUG] Alap adatok betöltése...")
         jarat1 = BelfoldiJarat("B123", "Budapest", 10000)
-        jarat2 = NemzetkoziJarat("N456", "London", 50000)
-        jarat3 = NemzetkoziJarat("N789", "New York", 80000)
+        jarat2 = NemzetkoziJarat("N456", "Dubai", 50000)
+        jarat3 = NemzetkoziJarat("N789", "Katmandu", 80000)
 
         self.legi_tarsasag.jarat_hozzaadasa(jarat1)
         self.legi_tarsasag.jarat_hozzaadasa(jarat2)
         self.legi_tarsasag.jarat_hozzaadasa(jarat3)
 
         self.foglalasok.append(JegyFoglalas(jarat1, "Kiss János", datetime.now(), "2024-12-01"))
+        self.foglalasok.append(JegyFoglalas(jarat1, "Tóth Géza", datetime.now(), "2024-12-03"))
         self.foglalasok.append(JegyFoglalas(jarat2, "Nagy Anna", datetime.now(), "2024-12-05"))
+        self.foglalasok.append(JegyFoglalas(jarat2, "Farkas Béla", datetime.now(), "2024-12-07"))
         self.foglalasok.append(JegyFoglalas(jarat3, "Szabó Péter", datetime.now(), "2024-12-10"))
+        self.foglalasok.append(JegyFoglalas(jarat3, "Kovács Edit", datetime.now(), "2024-12-12"))
         # print("[DEBUG] Alap adatok betöltése kész.")
 
     def jegy_foglalasa(self, jaratszam, utas_nev, repules_datuma):
