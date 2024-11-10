@@ -5,7 +5,7 @@ class LegiTarsasag:
         self.jaratok = []
 
     def jarat_hozzaadasa(self, jarat):
-        print(f"[DEBUG] Járat hozzáadása: {jarat.jarat_info()}")
+        # print(f"[DEBUG] Járat hozzáadása: {jarat.jarat_info()}")
         self.jaratok.append(jarat)
 
     def listaz_jaratok(self):
